@@ -56,9 +56,23 @@ void display(struct stack *stack)
         printf("    |  %d  |\n", stack->data[i]);
     }
 }
+/*
+
+0 to 41
+42 to 43 cont
+44 to 44
+45 to 45 cont 
+46 to 46
+47 to 57 cont
+58 to 92
+93 to 93 cont
+94 to 255
+
+*/
 void main()
 {
     char post[10] = "";
+    int flag = 0;
     line();
     printf("\n");
     printf("Enter a valid postfix expression : ");
@@ -67,48 +81,65 @@ void main()
     struct stack *stack = createStack(strlen(post));
     for (int i = 0; post[i]; i++)
     {
-        if (post[i] >= '0' && post[i] <= '9')
+        if (!(post[i] >= '0' && post[i] <= '9' || post[i] == '+' || post[i] == '-' || post[i] == '*' || post[i] == '/' || post[i] == '^'))
         {
-            push(stack, post[i] - '0');
+            line();
+            printf("\nInvalid expression.\n");
+            line();
+            exit(0);
         }
         else
         {
-            line();
-            printf("\n");
-            int op1 = pop(stack);
-            line();
-            printf("\n");
-            int op2 = pop(stack);
-            line();
-            switch (post[i])
-            {
-            case '+':
-                printf("\n%d + %d = %d\n", op2, op1, op2 + op1);
-                push(stack, op2 + op1);
-                break;
-            case '-':
-                printf("\n%d - %d = %d\n", op2, op1, op2 - op1);
-                push(stack, op2 - op1);
-                break;
-            case '*':
-                printf("\n%d * %d = %d\n", op2, op1, op2 * op1);
-                push(stack, op2 * op1);
-                break;
-            case '/':
-                printf("\n%d / %d = %d\n", op2, op1, op2 / op1);
-                push(stack, op2 / op1);
-                break;
-            case '^':
-                printf("\n%d ^ %d = %.1lf\n", op2, op1, pow(op2, op1));
-                push(stack, pow(op1, op2));
-                break;
-            }
+            flag = 1;
         }
     }
-    line();
-    printf("\n");
-    int final = pop(stack);
-    line();
-    printf("\nANSWER = %d\n", final);
-    line();
+    if (flag == 1)
+    {
+        for (int i = 0; post[i]; i++)
+        {
+            if (post[i] >= '0' && post[i] <= '9')
+            {
+                push(stack, post[i] - '0');
+            }
+            else
+            {
+                line();
+                printf("\n");
+                int op1 = pop(stack);
+                line();
+                printf("\n");
+                int op2 = pop(stack);
+                line();
+                switch (post[i])
+                {
+                case '+':
+                    printf("\n%d + %d = %d\n", op2, op1, op2 + op1);
+                    push(stack, op2 + op1);
+                    break;
+                case '-':
+                    printf("\n%d - %d = %d\n", op2, op1, op2 - op1);
+                    push(stack, op2 - op1);
+                    break;
+                case '*':
+                    printf("\n%d * %d = %d\n", op2, op1, op2 * op1);
+                    push(stack, op2 * op1);
+                    break;
+                case '/':
+                    printf("\n%d / %d = %d\n", op2, op1, op2 / op1);
+                    push(stack, op2 / op1);
+                    break;
+                case '^':
+                    printf("\n%d ^ %d = %.1lf\n", op2, op1, pow(op2, op1));
+                    push(stack, pow(op1, op2));
+                    break;
+                }
+            }
+        }
+        line();
+        printf("\n");
+        int final = pop(stack);
+        line();
+        printf("\nANSWER = %d\n", final);
+        line();
+    }
 }
